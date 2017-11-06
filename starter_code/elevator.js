@@ -2,23 +2,31 @@ class Elevator {
   constructor(){
     this.floor      = 0;
     this.MAXFLOOR   = 10;
-    this.requests   = [];
     this.direction = 'Up';
+    this.requests   = [2, 4, 7]; // Pending floor requests to stop at
+    this.waitingList = []; // People waiting for the elevator to come after their request
+    this.passengers = []; // Currently inside elevator
   }
 
-  start() {
-    var e = setInterval(() => {
-      this.update();
-    }, 500);
+  start(passenger) {
+    this.interval = setInterval(() => {
+      this.update(passenger);
+    }, 750);
   }
 
   stop() {
-    console.log('update stopped');
-    clearInterval(e);
+    clearInterval(this.interval);
   }
 
-  update() {
+  update(passenger) {
     this.log();
+    this.checkLimits();
+    this.call(passenger);
+    this._passengersEnter(passenger);
+    this._passengersLeave(passenger);
+  }
+
+  checkLimits() {
     if(this.floor < this.MAXFLOOR && this.direction == 'Up'){
       this.floorUp();
     } else {
@@ -31,9 +39,24 @@ class Elevator {
     }
   }
 
-  _passengersEnter() { }
+  _passengersEnter(passenger) {
+    for(var i = 0; i < waitingList.length; i++){
+      if(this.waitingList[i].originFloor == this.floor){
+        this.passengers.push(passenger); // add the person into the passengers array
+        this.waitingList.pop(passenger); // delete the passenger from the waitingList
+        this.requests.push(passenger.destinationFloor)// Add the destination floor of the passenger to the elevator requests
+        console.log(`${passenger.name} has entered the elevator. `); // We will show a message to indicate what just happens:
+      }
+    }
+  }
 
-  _passengersLeave() { }
+  _passengersLeave(passenger) {
+    for(var i = 0; i < passengers.length; i++){
+      if(this.passengers[i].destinationFloor == this.floor)
+      this.passengers.pop(this.passengers[i]);
+      console.log(`${this.passengers[i].name} has left the elevator. `);
+    }
+  }
 
   floorUp() {
     this.direction = 'Up';
@@ -45,7 +68,10 @@ class Elevator {
     this.floor -= 1;
   }
 
-  call() { }
+  call(passenger) {
+    this.waitingList.push(passenger);
+    this.requests.push(passenger.originFloor)
+  }
 
   log() {
     console.log(`Direction: ${this.direction} | Floor: ${this.floor}`);
