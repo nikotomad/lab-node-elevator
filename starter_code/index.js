@@ -5,3 +5,4 @@ let elevator = new Elevator();
 let passenger = new Person('Nikoto', 2, 5);
 
 elevator.start(passenger);
+elevator.call(passenger);
