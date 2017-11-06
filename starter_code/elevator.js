@@ -52,9 +52,10 @@ class Elevator {
 
   _passengersLeave(passenger) {
     for(var i = 0; i < passengers.length; i++){
-      if(this.passengers[i].destinationFloor == this.floor)
-      this.passengers.pop(this.passengers[i]);
-      console.log(`${this.passengers[i].name} has left the elevator. `);
+      if(this.passengers[i].destinationFloor == this.floor){
+        this.passengers.pop(this.passengers[i]); // we will delete that person from the passengers array.
+        console.log(`${this.passengers[i].name} has left the elevator. `); // We will show a message to indicate what just happens:
+      }
     }
   }
 
