@@ -11,21 +11,22 @@ class Elevator {
   start(passenger) {
     this.interval = setInterval(() => {
       this.update(passenger);
-    }, 750);
+    }, 1000);
   }
 
   stop() {
-    clearInterval(this.interval);
+    if(this.waitingList.length == 0 && this.floor == 0) clearInterval(this.interval);
   }
 
   update(passenger) {
     this.log();
-    this.checkLimits();
+    this.checkFloorLimits();
     this._passengersEnter(passenger);
     this._passengersLeave(passenger);
+    this.stop();
   }
 
-  checkLimits() {
+  checkFloorLimits() {
     if(this.floor < this.MAXFLOOR && this.direction == 'Up'){
       this.floorUp();
     } else {
@@ -44,7 +45,7 @@ class Elevator {
         this.passengers.push(passenger); // add the person into the passengers array
         this.waitingList.pop(passenger); // delete the passenger from the waitingList
         this.requests.push(passenger.destinationFloor)// Add the destination floor of the passenger to the elevator requests
-        console.log(`-> ${passenger.name} has entered the elevator. `); // We will show a message to indicate what just happens:
+        console.log(`-> ${passenger.name} has entered the elevator on floor ${this.floor}`); // We will show a message to indicate what just happens:
       }
     }
   }
@@ -53,7 +54,7 @@ class Elevator {
     for(var i = 0; i < this.passengers.length; i++){
       if(this.passengers[i].destinationFloor == this.floor){
         this.passengers.pop(this.passengers[i]); // we will delete that person from the passengers array.
-        console.log(`<- ${passenger.name} has left the elevator. `); // We will show a message to indicate what just happens:
+        console.log(`<- ${passenger.name} has left the elevator on floor ${this.floor}`); // We will show a message to indicate what just happens:
       }
     }
   }
